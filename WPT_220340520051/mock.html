@@ -1,0 +1,96 @@
+<html>
+    <head>
+       <script src="jquery-3.5.1.min.js"></script>
+        <script>
+            $(()=>{
+                let = book=[];
+
+                function showcontents(){
+                    let parametertothefunction={
+                        data : input,
+                        url : 'https//localhost:900/getallbooks',
+                        type :'get',
+                        datatype : 'jsons',
+                        success : (datagivenbyserver)=>{
+                            book = datagivenbyserver;
+
+                            let bookcontents ="";
+                            for(let i=0;i<book.length;i++)
+                            {
+                                bookcontents +=
+                                "<br/>" + book[i].bookid +
+                                " " +
+                                book[i].bookname +
+                                " " +
+                                book[i].price ;
+
+
+                            }
+                            $('#contents').html(bookcontents);
+                            
+                        },
+                        error :(err)=>{
+                            console.log("failure"+err);
+                        },
+
+                    };
+                    $.ajax(parametertothefunction);
+
+                }
+
+             
+           $("#addbook").click(()=>{
+            let = input = {bookid :$('#bookid').val(), bookname:$('#bookname').val(), price :$('#price').val() }
+            let parametertothefunction ={
+                data : input,
+                url : 'https//localhost:900/addbook',
+                type :'get',
+                datatype : 'jsons',
+                success : function (output){
+                    console.log("test the success"+output.status);
+                    
+
+                    if(output){
+                        $('#message').text("add Book Succesfully");
+
+                    }
+                    else
+                    {
+                        $('#message').text("Could not add book");
+                    }
+                    $('#bookname').val("");
+                    $('#price').val("");
+
+                    showcontents();
+
+                    document.querySelector('#bookid').disabled = false;
+
+                },
+                error :(err)=>
+                {
+                    console.log("test the sucess"+err);
+                },
+            };
+            
+            $.ajax(parametertothefunction);
+
+        
+           });
+           showcontents();
+        });
+
+
+
+       </script> 
+    </head>
+    <body>
+    </br>BookId : <input type="text" id="bookid" >
+        <span id ="message">What happen</span><br/>
+       <br/> Book Name : <input type="text" id="bookname"><br/>
+       <br/> Price : <input type="text" id="price"><br/>
+        <br/><button id="addbook">add a book</button>
+
+        <p id ="contents">show all book here</p>
+
+    </body>
+</html>
